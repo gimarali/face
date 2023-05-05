@@ -1,0 +1,29 @@
+ floor-annotation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    container:
+      image: dart:2.19.3
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        working-directory: floor_annotation
+        run: dart pub get
+
+      - name: Analyze
+        working-directory: floor_annotation
+        run: dart analyze --fatal-infos --fatal-warnings .
+
+      - name: Format
+        working-directory: floor_annotation
+        run: dart format --output=none --set-exit-if-changed .
+
+  floor-generator:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    container:
+      image: dart:2.19.3
