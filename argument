@@ -1,0 +1,32 @@
+    {
+            std::vector<std::string> argv;
+            argv.emplace_back("openpose.py");
+            for (auto item : d){
+                // Sanity check
+                std::size_t found = std::string(py::str(item.first)).find("=");
+                if (found != std::string::npos)
+                    error("PyOpenPose does not support equal sign flags (e.g., "
+                        + std::string(py::str(item.first)) + ").", __LINE__, __FUNCTION__, __FILE__);
+                // Add argument
+                argv.emplace_back("--" + std::string(py::str(item.first)) + "=" + std::string(py::str(item.second)));
+            }
+            parse_gflags(argv);
+        }
+        catch (const std::exception& e)
+        {
+            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
+        }
+    }
+
+    void init_argv(std::vector<std::string> argv)
+    {
+        try
+        {
+            argv.insert(argv.begin(), "openpose.py");
+            parse_gflags(argv);
+        }
+        catch (const std::exception& e)
+        {
+            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
+        }
+    }
